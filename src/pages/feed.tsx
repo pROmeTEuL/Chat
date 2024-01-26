@@ -13,6 +13,7 @@ import {
 import { Heart } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Toggle } from "~/components/ui/toggle";
 
 const Feed = () => {
   return (
@@ -49,6 +50,8 @@ const PostsList = () => {
 };
 
 const PostCard = ({ post }: { post: Post }) => {
+  const heartPost = api.post.heartPost.useMutation();
+
   return (
     <Card>
       <CardHeader>
@@ -60,9 +63,9 @@ const PostCard = ({ post }: { post: Post }) => {
       <CardFooter>
         <div className="flex items-center gap-4">
           <p>{post.hearts}</p>
-          <Button size="icon" className="size-8">
-            <Heart className="size-4" />
-          </Button>
+          <Toggle className="w-min" size={"sm"}>
+            <Heart />
+          </Toggle>
         </div>
       </CardFooter>
     </Card>
