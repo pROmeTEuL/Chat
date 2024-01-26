@@ -15,4 +15,13 @@ export const replyRouter = createTRPCRouter({
         },
       });
     }),
+  getAllByPost: publicProcedure
+    .input(z.object({ postId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.reply.findMany({
+        where: {
+          postId: input.postId,
+        },
+      });
+    }),
 });

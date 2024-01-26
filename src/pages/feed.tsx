@@ -84,6 +84,7 @@ const PostCard = ({ post }: { post: Post }) => {
   const reply = useRef<HTMLTextAreaElement>(null);
   const author = api.user.getById.useQuery({ id: post.ownerId });
   const createReply = api.reply.createReply.useMutation();
+  const replies = api.reply.getAllByPost.useQuery({ postId: post.id });
 
   if (!user?.id) return null;
 
@@ -95,6 +96,14 @@ const PostCard = ({ post }: { post: Post }) => {
       </CardHeader>
       <CardContent>
         <p>{post.content}</p>
+        <p className="my-4">Replies:</p>
+        <ul>
+          {replies.data?.map((reply) => (
+            <li key={reply.id}>
+              <p>{reply.content}</p>
+            </li>
+          ))}
+        </ul>
       </CardContent>
       <CardFooter>
         <div className="flex items-center gap-4">
