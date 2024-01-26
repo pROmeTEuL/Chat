@@ -34,8 +34,8 @@ const LoggedOut = () => {
         <DropdownMenuLabel>Logged Out</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => {
-            router.push("/sign-in");
+          onClick={async () => {
+            await router.push("/sign-in");
           }}
         >
           Log In
@@ -69,8 +69,8 @@ const LoggedIn = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => {
-            signOut().then(() => {});
+          onClick={async () => {
+            await signOut();
           }}
         >
           Log out
