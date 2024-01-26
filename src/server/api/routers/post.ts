@@ -47,12 +47,14 @@ export const postRouter = createTRPCRouter({
   heartPost: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.post.findFirst({ where: { id: input.id } }).then((post) => {
-        if (!post) return;
-        ctx.db.post.update({
-          where: { id: input.id },
-          data: { hearts: post.hearts + 1 },
+      await ctx.db.post
+        .findFirst({ where: { id: input.id } })
+        .then(async (post) => {
+          if (!post) return;
+          await ctx.db.post.update({
+            where: { id: input.id },
+            data: { hearts: post.hearts + 1 },
+          });
         });
-      });
     }),
 });
