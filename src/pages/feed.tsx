@@ -32,16 +32,22 @@ import { create } from "domain";
 const Feed = () => {
   const { isSignedIn, user, isLoaded } = useUser();
   const authUser = api.user.authenticate.useMutation();
-  useEffect(() => {
+  const authenticate = () => {
     if (!user) return;
     if (!user.primaryEmailAddress) return;
-    if (!user.username) return;
+    if (!user.fullName) return;
     authUser.mutate({
       id: user.id,
       email: user.primaryEmailAddress.emailAddress,
-      name: user.username,
+      name: user.fullName,
     });
+  };
+  useEffect(() => {
+    authenticate();
   }, [user]);
+  useEffect(() => {
+    authenticate();
+  }, []);
   if (!isLoaded) return <div>Loading...</div>;
   if (!isSignedIn) return <div>Not signed in</div>;
 
