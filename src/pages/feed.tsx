@@ -1,5 +1,15 @@
 import { Header } from "~/components/header";
 import { Input } from "~/components/ui/input";
+import { Post } from "~/server/api/routers/post";
+import { api } from "~/utils/api";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 
 const Feed = () => {
   return (
@@ -10,6 +20,7 @@ const Feed = () => {
         <div className="col-span-2 flex flex-col gap-4">
           Feed
           <Input type="search" placeholder="search people or chirps" />
+          <PostsList />
         </div>
         <div></div>
       </main>
@@ -17,3 +28,32 @@ const Feed = () => {
   );
 };
 export default Feed;
+
+const PostsList = () => {
+  const topPosts = api.post.getTopPosts.useQuery({ count: 30 });
+  return (
+    <ul className="flex flex-col gap-2">
+      {topPosts.data?.map((post) => (
+        <li key={post.id}>
+          <PostCard post={post} />
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const PostCard = ({ post }: { post: Post }) => {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{post.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>{post.content}</p>
+      </CardContent>
+      <CardFooter>
+        <p>{post.hearts} hearts</p>
+      </CardFooter>
+    </Card>
+  );
+};

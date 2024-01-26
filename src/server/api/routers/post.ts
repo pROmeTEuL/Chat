@@ -46,12 +46,11 @@ export const postRouter = createTRPCRouter({
 
   getTopPosts: publicProcedure
     .input(z.object({ count: z.number() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.post
-        .findMany({
-          take: input.count,
-          orderBy: { createdAt: "desc" },
-        })
-        .then((posts) => posts.sort((a, b) => a.hearts - b.hearts));
+    .query(async ({ ctx, input }) => {
+      const posts = await ctx.db.post.findMany({
+        take: input.count,
+        orderBy: { createdAt: "desc" },
+      });
+      return posts.sort((a, b) => a.hearts - b.hearts);
     }),
 });
