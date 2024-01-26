@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Heart } from "lucide-react";
+import { Heart, PencilLine } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Toggle } from "~/components/ui/toggle";
@@ -21,6 +21,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -51,7 +52,7 @@ const Feed = () => {
         <main className="grid h-full w-full grid-cols-4 p-4">
           <div></div>
           <div className="col-span-2 flex max-h-screen flex-col gap-4">
-            Feed
+            <CreatePost />
             <Input type="search" placeholder="search people or chirps" />
             <PostsList />
           </div>
@@ -137,5 +138,67 @@ const PostCard = ({ post }: { post: Post }) => {
         </div>
       </CardFooter>
     </Card>
+  );
+};
+
+const CreatePost = () => {
+  const title = useRef<HTMLInputElement>(null);
+  const content = useRef<HTMLTextAreaElement>(null);
+  const createPost = api.post.create.useMutation();
+  const { user } = useUser();
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="default">
+          {" "}
+          Create post <PencilLine />{" "}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create post</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Input
+              ref={title}
+              id="title"
+              placeholder="Title"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Textarea
+              ref={content}
+              id="content"
+              placeholder="Content"
+              className="col-span-3"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              type="submit"
+              onClick={() => {
+                if (!title.current) return;
+                if (!content.current) return;
+                if (!user) return;
+                const titleValue = title.current.value;
+                const contentValue = content.current.value;
+                console.log(user.id);
+                createPost.mutate({
+                  title: titleValue,
+                  content: contentValue,
+                  ownerId: user.id,
+                });
+              }}
+            >
+              Create
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
