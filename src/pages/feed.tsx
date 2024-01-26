@@ -10,20 +10,26 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Heart } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
 const Feed = () => {
   return (
-    <div>
+    <div className="max-h-screen overflow-hidden">
       <Header />
-      <main className="grid h-full w-full grid-cols-4 p-4">
-        <div></div>
-        <div className="col-span-2 flex flex-col gap-4">
-          Feed
-          <Input type="search" placeholder="search people or chirps" />
-          <PostsList />
-        </div>
-        <div></div>
-      </main>
+      <ScrollArea className="overflow-hidden">
+        <main className="grid h-full w-full grid-cols-4 p-4">
+          <div></div>
+          <div className="col-span-2 flex max-h-screen flex-col gap-4">
+            Feed
+            <Input type="search" placeholder="search people or chirps" />
+            <PostsList />
+          </div>
+          <div></div>
+        </main>
+        <ScrollBar></ScrollBar>
+      </ScrollArea>
     </div>
   );
 };
@@ -32,7 +38,7 @@ export default Feed;
 const PostsList = () => {
   const topPosts = api.post.getTopPosts.useQuery({ count: 30 });
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col gap-4">
       {topPosts.data?.map((post) => (
         <li key={post.id}>
           <PostCard post={post} />
@@ -52,7 +58,12 @@ const PostCard = ({ post }: { post: Post }) => {
         <p>{post.content}</p>
       </CardContent>
       <CardFooter>
-        <p>{post.hearts} hearts</p>
+        <div className="flex items-center gap-4">
+          <p>{post.hearts}</p>
+          <Button size="icon">
+            <Heart />
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );
