@@ -17,13 +17,19 @@ export const postRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(z.object({ title: z.string().min(1), content: z.string().optional(), ownerId: z.string() }))
+    .input(
+      z.object({
+        title: z.string().min(1),
+        content: z.string().optional(),
+        ownerId: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.post.create({
         data: {
           title: input.title,
           content: input.content,
-          ownerId: input.ownerId
+          ownerId: input.ownerId,
         },
       });
     }),
@@ -37,4 +43,15 @@ export const postRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.post.findMany();
   }),
+
+  getTopPosts: publicProcedure
+    .input(z.object({ count: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.post
+        .findMany({
+          take: input.count,
+          orderBy: { createdAt: "desc" },
+        })
+        .then((posts) => posts.sort((a, b) => a.hearts - b.hearts));
+    }),
 });

@@ -6,12 +6,12 @@ const Feed = () => {
     <div>
       <Header />
       <main className="grid h-full w-full grid-cols-4 p-4">
-        <div>Sidebar</div>
+        <div></div>
         <div className="col-span-2 flex flex-col gap-4">
           Feed
           <Input type="search" placeholder="search people or chirps" />
         </div>
-        <div>Second Sidebar</div>
+        <div></div>
       </main>
     </div>
   );
