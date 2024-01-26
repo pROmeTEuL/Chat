@@ -5,7 +5,7 @@ export const userRouter = createTRPCRouter({
   authenticate: publicProcedure
     .input(z.object({ id: z.string(), name: z.string(), email: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      ctx.db.user
+      await ctx.db.user
         .findUnique({ where: { id: input.id } })
         .then((user) => {
           if (user) {
@@ -24,6 +24,6 @@ export const userRouter = createTRPCRouter({
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return ctx.db.user.findUnique({ where: { id: input.id } });
+      return await ctx.db.user.findUnique({ where: { id: input.id } });
     }),
 });
