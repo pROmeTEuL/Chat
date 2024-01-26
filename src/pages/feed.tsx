@@ -53,7 +53,7 @@ const Feed = () => {
           <div className="col-span-2 flex max-h-screen flex-col gap-4">
             Feed
             <Input type="search" placeholder="search people or chirps" />
-            <PostsList user={user} />
+            <PostsList />
           </div>
           <div></div>
         </main>
@@ -64,27 +64,23 @@ const Feed = () => {
 };
 export default Feed;
 
-const PostsList = ({ user }: { user: any | null | undefined }) => {
+const PostsList = () => {
   const topPosts = api.post.getTopPosts.useQuery({ count: 30 });
   return (
     <ul className="flex flex-col gap-4">
       {topPosts.data?.map((post) => (
         <li key={post.id}>
-          <PostCard post={post} user={user} />
+          <PostCard post={post} />
         </li>
       ))}
     </ul>
   );
 };
 
-const PostCard = ({
-  post,
-  user,
-}: {
-  post: Post;
-  user: any | null | undefined;
-}) => {
+const PostCard = ({ post }: { post: Post }) => {
   const heartPost = api.post.heartPost.useMutation();
+  const { user } = useUser();
+  if (!user?.id) return null;
   const author = api.user.getById.useQuery({ id: post.ownerId });
   const createReply = api.reply.createReply.useMutation();
   const reply = useRef<HTMLTextAreaElement>(null);
