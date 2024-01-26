@@ -14,7 +14,7 @@ import { Heart } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Toggle } from "~/components/ui/toggle";
-import { useUser } from "@clerk/nextjs";
+import { auth, useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
 
 const Feed = () => {
@@ -68,11 +68,13 @@ const PostsList = () => {
 
 const PostCard = ({ post }: { post: Post }) => {
   const heartPost = api.post.heartPost.useMutation();
+  const author = api.user.getById.useQuery({ id: post.ownerId });
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>{post.title}</CardTitle>
+        <CardDescription>By {author.data?.name}</CardDescription>
       </CardHeader>
       <CardContent>
         <p>{post.content}</p>
