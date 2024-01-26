@@ -4,5 +4,9 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  return <main>Hello World</main>;
+  const lol = api.post.hello.useQuery({ text: "my nuts" });
+
+  if (lol.isLoading) return <div>Loading...</div>;
+
+  return <main>{lol.data?.greeting}</main>;
 }
