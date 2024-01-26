@@ -75,7 +75,7 @@ const CreatePost = () => {
             <Input id="title" placeholder="Title" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Textarea id="content" value="Content" className="col-span-3" />
+            <Textarea id="content" placeholder="Content" className="col-span-3" />
           </div>
         </div>
         <DialogFooter>
