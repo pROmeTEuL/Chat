@@ -80,10 +80,11 @@ const PostsList = () => {
 const PostCard = ({ post }: { post: Post }) => {
   const heartPost = api.post.heartPost.useMutation();
   const { user } = useUser();
-  if (!user?.id) return null;
+  const reply = useRef<HTMLTextAreaElement>(null);
   const author = api.user.getById.useQuery({ id: post.ownerId });
   const createReply = api.reply.createReply.useMutation();
-  const reply = useRef<HTMLTextAreaElement>(null);
+
+  if (!user?.id) return null;
 
   return (
     <Card>
