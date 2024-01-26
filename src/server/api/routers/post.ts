@@ -57,4 +57,17 @@ export const postRouter = createTRPCRouter({
           });
         });
     }),
+    unheartPost: publicProcedure
+    .input(z.object({id: z.string()}))
+    .mutation(async ({ctx, input}) => {
+      await ctx.db.post
+        .findFirst({where: {id: input.id}})
+        .then(async (post) => {
+          if (!post) return;
+          await ctx.db.post.update({
+            where: {id: input.id},
+            data: { hearts: post.hearts - 1}
+          })
+        })
+    })
 });

@@ -114,9 +114,7 @@ const PostCard = ({ post }: { post: Post }) => {
       <CardFooter>
         <div className="flex items-center gap-4">
           <p>{post.hearts}</p>
-          <Toggle className="w-min" size={"sm"}>
-            <Heart />
-          </Toggle>
+          <HeartButton/>
           <Dialog>
             <DialogTrigger asChild>
               <Button>Reply</Button>
@@ -153,6 +151,30 @@ const PostCard = ({ post }: { post: Post }) => {
         </div>
       </CardFooter>
     </Card>
+  );
+};
+
+const HeartButton = () => {
+  const [toggle, setToggle] = useState(true);
+  const heartpost = api.post.heartPost.useMutation();
+  const unheartpost = api.post.unheartPost.useMutation();
+  const { user } = useUser();
+  if(!user) return;
+  return (
+    <Button onClick={() => {
+      setToggle(!toggle)
+      if (toggle) {
+        heartpost.mutate({
+          id: user.id
+        });
+      } else {
+        unheartpost.mutate({
+          id: user.id
+        })
+      }
+    }}>
+      {toggle ? (<Heart color="#ff0000" />) : (<Heart/>)}
+    </Button>
   );
 };
 
