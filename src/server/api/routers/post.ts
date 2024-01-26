@@ -6,16 +6,6 @@ import { RouterOutputs } from "~/utils/api";
 export type Post = RouterOutputs["post"]["getAll"][0];
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(async ({ input }) => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   create: publicProcedure
     .input(
       z.object({
@@ -25,7 +15,7 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.post.create({
+      return await ctx.db.post.create({
         data: {
           title: input.title,
           content: input.content,
@@ -57,15 +47,12 @@ export const postRouter = createTRPCRouter({
   heartPost: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      ctx.db.post
-        .findFirst({ where: { id: input.id } })
-        .then((post) => {
-          if (!post) return;
-          ctx.db.post.update({
-            where: { id: input.id },
-            data: { hearts: post.hearts + 1 },
-          });
-        })
-        .catch((error) => {});
+      await ctx.db.post.findFirst({ where: { id: input.id } }).then((post) => {
+        if (!post) return;
+        ctx.db.post.update({
+          where: { id: input.id },
+          data: { hearts: post.hearts + 1 },
+        });
+      });
     }),
 });
