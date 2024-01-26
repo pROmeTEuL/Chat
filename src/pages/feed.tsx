@@ -15,7 +15,18 @@ import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Toggle } from "~/components/ui/toggle";
 import { auth, useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { Textarea } from "~/components/ui/textarea";
+import { create } from "domain";
 
 const Feed = () => {
   const { isSignedIn, user, isLoaded } = useUser();
@@ -42,7 +53,7 @@ const Feed = () => {
           <div className="col-span-2 flex max-h-screen flex-col gap-4">
             Feed
             <Input type="search" placeholder="search people or chirps" />
-            <PostsList />
+            <PostsList user={user} />
           </div>
           <div></div>
         </main>
@@ -53,22 +64,30 @@ const Feed = () => {
 };
 export default Feed;
 
-const PostsList = () => {
+const PostsList = ({ user }: { user: any | null | undefined }) => {
   const topPosts = api.post.getTopPosts.useQuery({ count: 30 });
   return (
     <ul className="flex flex-col gap-4">
       {topPosts.data?.map((post) => (
         <li key={post.id}>
-          <PostCard post={post} />
+          <PostCard post={post} user={user} />
         </li>
       ))}
     </ul>
   );
 };
 
-const PostCard = ({ post }: { post: Post }) => {
+const PostCard = ({
+  post,
+  user,
+}: {
+  post: Post;
+  user: any | null | undefined;
+}) => {
   const heartPost = api.post.heartPost.useMutation();
   const author = api.user.getById.useQuery({ id: post.ownerId });
+  const createReply = api.reply.createReply.useMutation();
+  const reply = useRef<HTMLTextAreaElement>(null);
 
   return (
     <Card>
@@ -85,6 +104,39 @@ const PostCard = ({ post }: { post: Post }) => {
           <Toggle className="w-min" size={"sm"}>
             <Heart />
           </Toggle>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Reply</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Reply</DialogTitle>
+                <DialogDescription>
+                  Reply to {author.data?.name}
+                </DialogDescription>
+              </DialogHeader>
+              <Textarea ref={reply} />
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-min"
+                  onClick={() => {
+                    if (!reply.current) return;
+                    const content = reply.current.value;
+                    if (!content) return;
+                    createReply.mutate({
+                      content,
+                      postId: post.id,
+                      userId: user.id,
+                    });
+                  }}
+                >
+                  Send Reply
+                </Button>
+              </DialogClose>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardFooter>
     </Card>
