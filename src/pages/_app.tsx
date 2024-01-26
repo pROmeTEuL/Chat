@@ -8,6 +8,7 @@ import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "~/lib/utils";
 import { ThemeProvider } from "~/components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -16,21 +17,23 @@ export const fontSans = FontSans({
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <div
-        className={cn(
-          "bg-background min-h-screen font-sans antialiased",
-          fontSans.variable,
-        )}
+    <ClerkProvider {...pageProps}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
       >
-        <Component {...pageProps} />
-      </div>
-    </ThemeProvider>
+        <div
+          className={cn(
+            "bg-background min-h-screen font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
+          <Component {...pageProps} />
+        </div>
+      </ThemeProvider>
+    </ClerkProvider>
   );
 };
 
