@@ -5,8 +5,9 @@ import { api } from "~/utils/api";
 
 export default function Home() {
   const lol = api.post.hello.useQuery({ text: "my nuts" });
+  const allPosts = api.post.getAll.useQuery();
 
-  if (lol.isLoading) return <div>Loading...</div>;
+  if (allPosts.isLoading) return <div>Loading...</div>;
 
-  return <main>{lol.data?.greeting}</main>;
+  return <main>{allPosts.data?.map((el) => el.name)}</main>;
 }
