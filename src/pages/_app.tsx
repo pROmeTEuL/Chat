@@ -7,6 +7,7 @@ import "~/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "~/lib/utils";
+import { ThemeProvider } from "~/components/theme-provider";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,14 +16,21 @@ export const fontSans = FontSans({
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <div
-      className={cn(
-        "bg-background min-h-screen font-sans antialiased",
-        fontSans.variable,
-      )}
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
     >
-      <Component {...pageProps} />
-    </div>
+      <div
+        className={cn(
+          "bg-background min-h-screen font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <Component {...pageProps} />
+      </div>
+    </ThemeProvider>
   );
 };
 
