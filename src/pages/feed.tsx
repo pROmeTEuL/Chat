@@ -18,7 +18,7 @@ const Feed = () => {
   return (
     <div className="max-h-screen overflow-hidden">
       <Header />
-      <ScrollArea className="overflow-hidden">
+      <ScrollArea>
         <main className="grid h-full w-full grid-cols-4 p-4">
           <div></div>
           <div className="col-span-2 flex max-h-screen flex-col gap-4">
@@ -60,8 +60,8 @@ const PostCard = ({ post }: { post: Post }) => {
       <CardFooter>
         <div className="flex items-center gap-4">
           <p>{post.hearts}</p>
-          <Button size="icon">
-            <Heart />
+          <Button size="icon" className="size-8">
+            <Heart className="size-4" />
           </Button>
         </div>
       </CardFooter>
