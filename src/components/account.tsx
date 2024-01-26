@@ -1,5 +1,5 @@
-import { Menu } from "lucide-react";
-import { Button } from "./ui/button";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
@@ -9,9 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
+import { Button } from "./ui/button";
 
 export const Account = () => {
   const user = useUser();
