@@ -70,7 +70,7 @@ const LoggedIn = () => {
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
-            signOut();
+            signOut().then(() => {});
           }}
         >
           Log out
