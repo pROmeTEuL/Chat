@@ -7,8 +7,10 @@ import { api } from "~/utils/api";
 import { Button } from "~/components/ui/button";
 import { Post } from "~/server/api/routers/post";
 import { useState } from "react";
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter();
   const allPosts = api.post.getAll.useQuery();
   const [showPosts, setShowPosts] = useState(false);
 
@@ -22,10 +24,7 @@ export default function Home() {
 
   return (
     <main className="p-4">
-      <Button variant="default" onClick={() => setShowPosts(!showPosts)}>
-        {showPosts ? "Hide" : "Show"} Posts
-      </Button>
-      {showPosts ? <PostsList posts={allPosts.data} /> : null}
+      <Button variant="default" onClick={() => router.push('/login')}> Login </Button>
     </main>
   );
 }
