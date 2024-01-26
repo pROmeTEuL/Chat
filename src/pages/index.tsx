@@ -16,7 +16,7 @@ export default function Home() {
     return <div>Loading...</div>;
   }
 
-  if (allPosts.error || !allPosts.data) {
+  if (allPosts.error ?? !allPosts.data) {
     return <div>Error: {allPosts.error?.message}</div>;
   }
 
