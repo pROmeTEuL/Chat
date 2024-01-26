@@ -7,7 +7,9 @@ import { useRouter } from "next/router";
 
 type Providers = "google" | "apple";
 
-export default function Home() {}
+export default function Home() {
+  return <div>Home</div>;
+}
 
 /*
 
