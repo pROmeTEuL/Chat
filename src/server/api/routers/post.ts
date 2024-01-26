@@ -41,7 +41,7 @@ export const postRouter = createTRPCRouter({
         take: input.count,
         orderBy: { createdAt: "desc" },
       });
-      return posts.sort((a, b) => a.hearts - b.hearts);
+      return posts.sort((a, b) => b.hearts - a.hearts);
     }),
 
   heartPost: publicProcedure
