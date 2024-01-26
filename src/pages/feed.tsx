@@ -14,8 +14,25 @@ import { Heart } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Toggle } from "~/components/ui/toggle";
+import { useUser } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 const Feed = () => {
+  const { isSignedIn, user, isLoaded } = useUser();
+  const authUser = api.user.authenticate.useMutation();
+  useEffect(() => {
+    if (!user) return;
+    if (!user.primaryEmailAddress) return;
+    if (!user.username) return;
+    authUser.mutate({
+      id: user.id,
+      email: user.primaryEmailAddress.emailAddress,
+      name: user.username,
+    });
+  }, [user]);
+  if (!isLoaded) return <div>Loading...</div>;
+  if (!isSignedIn) return <div>Not signed in</div>;
+
   return (
     <div className="max-h-screen overflow-hidden">
       <Header />
