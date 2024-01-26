@@ -10,9 +10,21 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Heart } from "lucide-react";
+
+import { Heart, PencilLine } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog"
+import { Textarea } from "~/components/ui/textarea"
+
 
 const Feed = () => {
   return (
@@ -22,7 +34,7 @@ const Feed = () => {
         <main className="grid h-full w-full grid-cols-4 p-4">
           <div></div>
           <div className="col-span-2 flex max-h-screen flex-col gap-4">
-            Feed
+            <div id="bla"><CreatePost /></div>
             <Input type="search" placeholder="search people or chirps" />
             <PostsList />
           </div>
@@ -45,6 +57,32 @@ const PostsList = () => {
         </li>
       ))}
     </ul>
+  );
+};
+
+const CreatePost = () => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="default"> Create post <PencilLine /> </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create post</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Input id="title" placeholder="Title" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Textarea id="content" value="Content" className="col-span-3" />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button type="submit">Create</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
